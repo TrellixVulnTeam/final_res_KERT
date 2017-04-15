@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+{% block bodycontent %}
+<div style="width: 1170px;margin: auto">
+		<div class="projectlist">
+			<h2 style="margin: 10px 0px 8px 0px;font-size: 1em;font-weight: bold;">
+					<p style="line-height: 200%; margin-bottom: 0;">
+						<a style="color: #7D0612;">
+							<b><font size="6" face="Arial"></font></b>
+					  </a>
+					  <b><font size="6" face="Arial"><a href="javascript:void(0)"> {{project_info['Topic']}}</a></font></b>
+					</p>
+					<div>
+							<a><font size="3" face="Arial"></font></a>
+							<font size="3" face="Arial"><a href="javascript:void(0)">{{project_info['Abstract']}}</a></font>
+					</div>
+					<p></p>
+			</h2>
+	 </div>
+
+{% if not edit %}	 
+		<div class="context">
+			 <p>
+					<b><font size="3" face="Arial">People: </font>
+					{% for person in project_info['People'] %}
+					<a href="javascript:void(0)" style="color:#7D0612;">{{person['Peoplename']}}</a></b>
+					{%endfor%}
+			</p>
+				<p></p>
+				<!--{% if project_info['Website']!= "" %} !-->
+					<p>
+						<b><font size="3" face="Arial">Website: </font>
+							<a href="{{project_info['Website']}}"  style="color:#7D0612;">{{project_info['Website']}}</a>
+						</b>				
+					</p>
+					<p></p>
+			<!--	{% endif %}  !-->
+									
+				<div style="margin-top:20px;overflow:auto;margin-bottom:30px;">
+				{% if project_info['pic']!=False %}
+
+					<div class="left">
+						<img src="/static/images/{{project_info['pic']['Pictureid']}}.{{project_info['pic']['format']}}" id = "{{project_info['pic']['Pictureid']}}"  style="border: 1px solid #787878; width:250px;heigth:190px;">
+					</div>
+				{% endif %}
+					{% if project_info['content']!="" %}
+					<div class="left">
+						<p>{{project_info['content']}}</p>
+					</div>
+					{% endif %}
+					
+				</div>
+				<div style="clear:both;margin-bottom:10px;">
+						<p>
+						<b><font size="3" face="Arial">Publications:</font></b>
+						<br>
+					</p>
+						{% for pub in project_info['publications'] %}
+							<p>{{pub['People']}} {{pub['Pubname']}} {{pub['Informaion']}} {{pub['Pubtime']}}</p>
+						{% endfor %}
+				</div>
+				<div>
+				{% if session['username'] %}
+					<button class="button border-red" id="project_edit_{{projectid}}_link" onclick="window.location.href='{{url_for('project.project_edit_route', projectid = projectid)}}'">Edit</button>
+				{% endif %}
+				</div>			
+				
+				
+				
+				
+		</div>
+{% endif %}	
+
+{% if edit %}
+<div class="projectlist panel admin-panel margin-top">
+    <h1>This is the project edit page</h1>
+   <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">Picture and Publication</strong> </div>
+    <table class="table table-hover text-center">
+      <tr>
+      	<td>The Project Picture</td>
+				<td width="300px">
+					<form id="picture_delete_{{project_info['pic']['Pictureid']}}" action="{{url_for('project.project_edit_route', projectid = projectid)}}" method = "post">
+						<input type="hidden" name="op" value="delete_pic">
+						<input type="hidden" name="Pictureid" value="{{project_info['pic']['Pictureid']}}">
+						<button class="button border-red icon-trash-o" style="padding:5px 15px;" id="{{project_info['pic']['Pictureid']}}" type="submit" form="picture_delete_{{project_info['pic']['Pictureid']}}">Delete The Project Picture</button>
+					</form>
+				</td>
+      </tr>
+
+      
+     	{% for pub in project_info['publications'] %}
+				<tr>
+					<td>{{pub['People']}} {{pub['Pubname']}} {{pub['Informaion']}} {{pub['Pubtime']}}</td>
+					<td>
+						<form id="publication_delete_{{pub['Publicationid']}}" action="{{url_for('project.project_edit_route',projectid = projectid)}}" method = "post">
+							<input type="hidden" name="op" value="delete_pub">
+							<input type="hidden" name="Publicationid" value="{{pub['Publicationid']}}">
+							<button class="button border-red icon-trash-o" style="padding:5px 15px;" id="{{pub['Publicationid']}}" type="submit" form="publication_delete_{{pub['Publicationid']}}" method = "post">Delete This Publication</button>
+						</form>
+					</td>
+				</tr>s
+		{% endfor %}
+		</table>
+   </div>
+   
+<!--  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">Upload a new picture for this project here</strong> </div>
+    <table class="table table-hover text-center">
+      <tr>
+      	<td>The Project Picture</td>
+				<td width="300px;">
+						<form id="pic_input" enctype=multipart/form-data action="{{url_for('project.project_edit_route',projectid = projectid)}}" method = "post">
+						<input type="hidden" name="op" value="add_pic">
+						<input type=file_name=file>
+						<button class="button border-red" id="pic_submit" type="submit" form="pic_input">Add picture</button>
+					</form>
+				</td>
+			</tr>
+
+     	
+		</table>
+   </div>
+   -->
+   
+   <div class="panel admin-panel">
+</div>
+
+<div class="panel admin-panel margin-top">
+  <div class="panel-head" id="add"><span class="icon-pencil-square-o"></span><strong>Upload a new publication for this project here</strong></div>
+  <div class="body-content">
+  <div align="center"><span style="color: red;"></span></div>
+    <form class="form-x" id="pub_input" action="{{url_for('project.project_edit_route',projectid = projectid)}}" method = "POST">
+      <input type="hidden" name="op" value="add_pub">
+
+      <div class="form-group">
+        <div class="label">
+          <label>Authors for the publication:</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="pub_people" id="pub_add_people">
+          <div class="tipss"></div>
+        </div>
+      </div>
+            
+      <div class="form-group">
+        <div class="label">
+          <label>Publication name:</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="pubname" id="pub_add_name">      
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>Published time:</label>
+        </div>
+        <div class="field">
+        	<input type="text" class="input w50" name="pubtime" id="pub_add_time">   
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="label">
+          <label>Other information:</label>
+        </div>
+        <div class="field">
+        	<input type="text" class="input w50" name="other_info" id="pub_information">       
+        </div>
+      </div>
+      
+     <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+        	<button class="button bg-main icon-check-square-o"  id="pub_submit" type="submit" form="pub_input">Add  publication</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+   
+</div>
+</div>
+{% endif %}
+{% endblock bodycontent %}

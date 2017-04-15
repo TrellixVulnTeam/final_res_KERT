@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+	{% block head %}
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="renderer" content="webkit"> {% block title %}
+	<title>Login</title> {% endblock title %}
+	<script src="/static/js/jquery.js"></script>
+	<script src="/static/js/pintuer.js"></script>
+	<script src="/static/js/main.js"></script>
+	<link rel="stylesheet" href="/static/css/style.css?ver=1.1">
+	<link rel="stylesheet" href="/static/css/pintuer.css">
+	<link rel="stylesheet" href="/static/css/admin.css?k=1">
+	<link rel="stylesheet" href="/static/css/projects.css"> {% endblock head %}
+</head>
+
+<body>
+	{% block header %}
+	<div class="header">
+		<!--<div class="container">-->
+		<div class="headcontainer">
+			<div>
+				<ul class="introduce">
+					<a href="http://web.eecs.umich.edu/~mozafari/" id="nav_professor">BARZAN MOZAFARI</a>
+					<a href="javascript:void(0)">&nbsp;&nbsp;</a>
+					<a href="http://umich.edu/" id="nav_university">UNIVERSITY OF MICHIGAN</a>
+					<a href="javascript:void(0)">&nbsp;&nbsp;</a>
+					<a href="http://dbgroup.eecs.umich.edu/" id="nav_database">DATABASE SYSTEMS</a>
+				</ul>
+			</div>
+			<div style="overflow:auto;margin-bottom:10px;">
+				<ul class="down">
+					<li>
+						<div class="tip tipdown"><a href="javascript:void(0)"onclick="changeInfo('info',this)"style="font-size":8px;">click</a></div>
+					</li>
+				</ul>
+
+				<ul class="info" id="info">
+					<li><a href="javascript:void(0)" style="display:block;width:50px;height:20px;">&nbsp;</a></li>
+
+					{% if session['username'] %}
+					<a href="javascript:void(0)">Logged in as {{session['firstname']}} {{session['lastname']}}</a>
+					<a href="javascript:void(0)">&nbsp;&nbsp;</a>
+					<a href="{{url_for('projects.projects_route')}}" id="nav_home">Home</a>
+					<a href="javascript:void(0)">&nbsp;&nbsp;</a>
+					<a href="{{url_for('logout.logout_route')}}" id="nav_logout">Logout</a>
+					{% endif %}
+					{% if not session['username'] %}
+					<a href="{{url_for('login.login_route')}}" id="nav_in">Login</a>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+	{% endblock header %}
+	
+	 {% block bodycontent %} {% endblock bodycontent %}
+	 
+</body>
+</html>

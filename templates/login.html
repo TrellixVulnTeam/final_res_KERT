@@ -1,0 +1,43 @@
+{% extends "base.html" %} 
+{% block bodycontent %}
+<!--<div class="bg"></div>-->
+<div class="xs6 xm4 xs3-move xm4-move">
+    <div style="height:150px;"></div>
+    <div class="media media-y margin-big-bottom">
+    </div>
+    <form method="post" id="submission" action="{{url_for('login.login_route')}}">
+        <div class="panel loginbox">
+            <div class="text-center margin-big padding-big-top">
+                <h1>Login Page</h1>
+            </div>
+            <div class="text-center margin-big padding-big-top">
+                {% if status[0] == 0 %} 
+                    {% for item in status[1] %}
+                <font size="2" color="red">{{item}}</font>
+                    {% endfor %} 
+                {% else %}
+                <p> </p>
+                {% endif %}
+            </div>
+            <div class="panel-body" style="padding:30px; padding-bottom:10px; padding-top:10px;">
+                <div class="form-group">
+                    <div class="field field-icon-right">
+                        <input type="text" class="input input-big" name="username" placeholder="username" data-validate="required:please input username"
+                        />
+                        <span class="icon icon-user margin-small"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="field field-icon-right">
+                        <input type="password" class="input input-big" name="password" placeholder="password" data-validate="required:please input password"
+                        />
+                        <span class="icon icon-key margin-small"></span>
+                    </div>
+                </div>
+            </div>
+            <div style="padding:30px;"><input type="submit" class="button button-block bg-main text-big input-big" value="Login"></div>
+        </div>
+    </form>
+</div>
+<!--original form is wrong, didn't comply with the requriment for-->
+{% endblock bodycontent %}

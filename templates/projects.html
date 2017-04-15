@@ -1,0 +1,156 @@
+ {% extends "base.html" %} {% block bodycontent %} 
+ <body>
+ {% if not edit %}
+<div class="project">
+  <h1 class="currentProj">Current Projects</h1>
+  <ul style="margin-bottom:20px;">
+    {% for project_element in current_project_list %}
+    {% if project_element['Abstract']!= "" %}
+    <li><a href="{{url_for('project.project_route',projectid = project_element['Projectid'])}}" id="project_{{project_element['Projectid']}}_link"><b>{{project_element['Topic']}} </b>"{{project_element['Abstract']}}"</a></li>
+    {% else %}
+    <li><a href="{{url_for('project.project_route',projectid = project_element['Projectid'])}}" id="project_{{project_element['Projectid']}}_link"><b>{{project_element['Topic']}} </b></a></li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+
+  <h1 class="currentProj"> Past Projects</h1>
+  <ul>
+    {% for project_element in past_project_list %}
+    {% if project_element['Abstract']!= "" %}
+    <li><a href="{{url_for('project.project_route',projectid = project_element['Projectid'])}}" id="project_{{project_element['Projectid']}}_link"><b>{{project_element['Topic']}} </b>"{{project_element['Abstract']}}"</a></li>
+    {% else: %}
+    <li><a href="{{url_for('project.project_route',projectid = project_element['Projectid'])}}" id="project_{{project_element['Projectid']}}_link"><b>{{project_element['Topic']}}</b></a></li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% if session['username'] %}
+<a href="{{url_for('projects.projects_edit_route')}}" class="button border-red">Edit Projects</a> 
+{% endif %} 
+
+{% endif %}
+
+
+
+{% if edit %}
+
+<div class="projectlist panel admin-panel margin-top">
+  <h1>This is the edit page </h1>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">Current Projects</strong> </div>
+    <table class="table table-hover text-center">
+
+      {% for project_element in current_project_list %}
+      <tr>
+        <td>{{project_element['Topic']}}</td>
+        <td width="110px;"><button class="button border-red" id="project_edit_{{project_element['Projectid']}}_link" onclick="window.location.href='{{url_for('project.project_edit_route',projectid = project_element['Projectid'])}}'">Edit</button></td>
+        <td width="110px;">
+          <form id="delete_{{project_element['Projectid']}}" action="{{url_for('projects.projects_edit_route')}}" method="post">
+            <input type="hidden" name="op" value="delete">
+            <input type="hidden" name="projectid" value={{project_element['Projectid']}}>
+            <button class="button border-red icon-trash-o" style="padding:5px 15px;" id="delete_project_{{project_element['Projectid']}}"
+              type="submit" form="delete_{{project_element['Projectid']}}">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="panel admin-panel">
+    <div class="panel-head"><strong class="icon-reorder">Past Projects</strong> </div>
+    <table class="table table-hover text-center">
+ 
+      {% for project_element in past_project_list %}
+      <tr>
+        <td>{{project_element['Topic']}}</td>
+        <td width="110px;"><button class="button border-red" id="project_edit_{{project_element['Projectid']}}_link" onclick="window.location.href='{{url_for('project.project_edit_route',projectid = project_element['Projectid'])}}'">Edit</button></td>
+        <td width="110px;">
+          <form id="delete_{{project_element['Projectid']}}" action="{{url_for('projects.projects_edit_route')}}" method="post">
+            <input type="hidden" name="op" value="delete">
+            <input type="hidden" name="projectid" value={{project_element[ 'Projectid']}}>
+            <button class="button border-red icon-trash-o" id="delete_project_{{project_element['Projectid']}}" type="submit" form="delete_{{project_element['Projectid']}}">Delete</button>
+          </form>
+        </td>
+      </tr>
+
+      {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+
+
+
+<div class="panel admin-panel">
+</div>
+
+<div class="panel admin-panel margin-top">
+  <div class="panel-head" id="add"><span class="icon-pencil-square-o"></span><strong>Add Project</strong></div>
+  <div class="body-content">
+    <div align="center"><span style="color: red;"></span></div>
+    <form class="form-x" id="project_add" action="{{url_for('projects.projects_edit_route')}}" method="post">
+      <input type="hidden" name="op" value="add">
+
+      <div class="form-group">
+        <div class="label">
+          <label>New</label>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>Project Topic:</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="Topic" id="project_add_topic">
+          <div class="tipss"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>Project Abstract:</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="Abstract" id="project_add_abstract">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>Project Website:</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="Website" id="project_add_website">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>Project Status(Current or Past):</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input w50" name="Status" id="project_add_status">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" id="project_add_submit" type="submit" form="project_add">Add</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+</body>
+
+
+{% endblock bodycontent%}
+
+</html>

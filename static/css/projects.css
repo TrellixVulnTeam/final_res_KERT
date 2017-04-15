@@ -1,0 +1,37 @@
+.currentProj{
+	 font-size: 1.25em;
+	 font-weight: bold;
+	 margin: 0 0 15px 0;
+}
+
+.project{
+	margin-top:10px;
+	margin-bottom:10px;
+	padding-right: 15px;
+  padding-left: 15px;	
+  font-weight: 300;
+  font-family: 'Helvetica Neue','Open Sans',Helvetica,Arial,sans-serif;
+  font-size: 15px;
+}
+
+.projectlist{
+	margin-top:40px;
+	padding-right: 15px;
+  padding-left: 15px;	
+  font-weight: 300;
+  font-family: 'Helvetica Neue','Open Sans',Helvetica,Arial,sans-serif;
+  font-size: 15px;
+}
+
+.project ul li{
+	list-style-type:disc;
+	line-height:40px;
+}
+
+.project ul a{
+	color: #7D0612;
+}
+
+.project ul a:hover{
+	text-decoration: underline;
+}
